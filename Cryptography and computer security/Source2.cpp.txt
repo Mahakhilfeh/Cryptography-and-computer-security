@@ -1,0 +1,95 @@
+//Islam Msalam,Maha khilfa,Raghad Nouri
+#include <iostream>
+#include<string>
+using namespace std;
+char enc(char x, int* k, int pos, int m)
+{
+	int count = 0;
+	char a[26];
+	for (int i = 0; i < 26; i++)
+		a[i] = 'a' + i;
+
+	char b[26];
+	for (int i = 0; i < 26; i++)
+		b[i] = 'A' + i;
+
+	for (int i = 0; i < 26; i++)
+		if (a[i] == x || b[i] == x)
+			count = i;
+
+	return a[(count + k[pos % m]) % 26];
+}
+void encription(string x, int* k, int numK, char* a)
+{
+	for (int i = 0; i < x.size(); i++)
+	{
+		if (x[i] == ' ')
+		{
+			cout << ' ';
+			a[i] = ' ';
+		}
+		else
+		{
+			a[i] = enc(x[i], k, i, numK);
+			cout << enc(x[i], k, i, numK);
+		}
+	}
+
+	//return a;
+}
+char dec(char x, int* k, int pos, int m)
+{
+	int count = 0;
+	char a[26];
+	for (int i = 0; i < 26; i++)
+		a[i] = 'z' - i;
+
+	char b[26];
+	for (int i = 0; i < 26; i++)
+		b[i] = 'Z' - i;
+
+	for (int i = 0; i < 26; i++)
+		if (a[i] == x || b[i] == x)
+			count = i;
+	return a[(count + k[pos % m]) % 26];
+
+}
+
+void decription(string x, int* k, int numK)
+{
+
+	for (int i = 0; i < x.size(); i++)
+		if (x[i] == ' ')
+			cout << ' ';
+		else
+			cout << dec(x[i], k, i, numK);
+}
+int main()
+{
+	string x;
+	int numKey = 0;
+	cout << "Please Enter a text to encrypte it." << endl;
+	getline(cin, x);
+	cout << "Please Enter the number of keys to use them in encription." << endl;
+	cin >> numKey;
+	char* a = new char[x.size()+1];
+
+
+	srand((unsigned)time(0));
+	int* randomNumber = new int[numKey];
+	for (int index = 0; index < numKey; index++)
+		randomNumber[index] = (rand() % 25) + 1;
+	cout << "This is the randomlly keys : ";
+	for (int index = 0; index < numKey; index++)
+		cout << randomNumber[index] << "  ";
+	cout << endl;
+	cout << "This is the cipher text:";
+
+	encription(x, randomNumber, numKey, a);
+	cout << endl;
+	cout << "This is the plainText ,we use in decription the same keys of encription :";
+	a[x.size()] = NULL;
+	decription(a, randomNumber, numKey);
+	cout << endl;
+	return 0;
+}

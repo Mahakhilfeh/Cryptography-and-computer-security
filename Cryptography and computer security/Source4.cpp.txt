@@ -1,0 +1,86 @@
+#include<iostream>
+#include <string>
+using namespace std;
+int main()
+{
+	int s[256];
+	for (int i = 0; i < 256; i++)
+		s[i] = i;
+
+	string k;
+	cout << "Enter a string key of any size less than 256" << endl;
+	getline(cin, k);
+	while (k.length() > 256)
+	{
+		cout << "ReEnter a string key of any size less than 256" << endl;
+		getline(cin, k);
+	}
+	int* k1 = new int[k.length()];
+	int len = k.length();
+	for (int i = 0; i < k.length(); i++)
+	{
+		if (k[i] == ' ')
+			k1[i] = 32;
+		k1[i] = int(k[i]);
+	}
+
+	string plaintext;
+	cout << "Enter the plaintext" << endl;
+	getline(cin, plaintext);
+
+	int* pt = new int[plaintext.length()];
+	for (int i = 0; i < plaintext.length(); i++)
+	{
+		if (plaintext[i] == ' ')
+			pt[i] = 32;
+		pt[i] = int(plaintext[i]);
+	}
+	
+	int key[256];
+	for (int i = 0; i < 256; i++)
+		key[i] = k1[i%len];
+
+	int j = 0;
+	for (int i = 0; i < 256; i++)
+	{
+		j = (j + s[i] + key[i]) % 256;
+		swap(s[i], s[j]);
+	}
+	
+	int* keyStream = new int[plaintext.length()];
+	int I = 0, J = 0,t;
+	for (I = 1; I < plaintext.length()+1;I++)
+	{
+		J = (J + s[I]) % 256;
+		swap(s[I], s[J]);
+		t = (s[I] + s[J]) % 256;
+		keyStream[I - 1] = s[t];
+
+	}
+	
+	int* enc= new int[plaintext.length()];
+	char* enc1 = new char[plaintext.length()];
+	for (int i = 0; i < plaintext.length(); i++)
+		enc[i] = (keyStream[i] ^ plaintext[i]);
+
+	for (int i = 0; i < plaintext.length(); i++)
+		enc1[i] = char(enc[i]);
+
+	for (int i = 0; i < plaintext.length(); i++)
+		cout << enc1[i] << " ";
+	cout << endl;
+
+	int* dec = new int[plaintext.length()];
+	char* dec1 = new char[plaintext.length()];
+
+	for (int i = 0; i < plaintext.length(); i++)
+		dec[i] = (keyStream[i] ^ enc[i]);
+
+	for (int i = 0; i < plaintext.length(); i++)
+		dec1[i] = char(dec[i]);
+
+	for (int i = 0; i < plaintext.length(); i++)
+		cout <<dec1[i];
+	
+	return 0;
+}

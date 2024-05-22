@@ -1,0 +1,181 @@
+//Islam Msalam,Raghad Nouri,Maha Khilfa
+#include<iostream>
+#include <stdio.h>
+#include <limits.h>
+#include<string>
+#include <bitset>
+using namespace std;
+#pragma warning (disable:4996)
+char* chartobin(unsigned char c)
+{
+    static char bin[CHAR_BIT + 1] = { 0 };
+    int i;
+
+    for (i = CHAR_BIT - 1; i >= 0; i--)
+    {
+        bin[i] = (c % 2) + '0';
+        c /= 2;
+    }
+
+    return bin;
+}
+void enc(char left[], char right[], char k[])
+{
+    char r1[5] = " ";
+    char r2[5] = " ";
+
+    for (int i = 0; i <= 3; i++)
+        if (right[i] == k[i])
+            r1[i] = '0';
+        else
+            r1[i] = '1';
+
+    for (int i = 0; i <= 3; i++)
+        if (left[i] == r1[i])
+            r2[i] = '0';
+        else
+            r2[i] = '1';
+
+    strcpy(left, right);
+    strcpy(right, r2);
+
+}
+char str_to_char(string group)
+{
+    bitset<8> temp(group);
+    return temp.to_ulong();
+}
+char* startf(char ch, char k[])
+{
+    char* bin = chartobin(ch);
+    char left[5] = " ";
+    char right[5] = " ";
+    char leri[10] = " ";
+
+    for (int i = 0; i <= 3; i++)
+        left[i] = bin[i];
+
+    for (int i = 0; i <= 3; i++)
+        right[i] = bin[i + 4];
+
+    for (int i = 0; i < 16; i++) {
+        enc(left, right, k);
+        for (int i = 0; i < 4; i++)
+            if (k[i] == '0')
+                k[i] = '1';
+            else
+                k[i] = '0';
+    }
+    // cout << left << endl;
+
+     //cout << right << endl;
+    strcpy(leri, left);
+    strcat(leri, right);
+    // cout << leri << endl;
+    cout << str_to_char(leri);
+    return leri;
+}
+
+void dec(char left[], char right[], char k1[])
+{
+    char r1[5] = " ";
+    char r2[5] = " ";
+
+    for (int i = 0; i <= 3; i++)
+        if (right[i] == k1[i])
+            r1[i] = '0';
+        else
+            r1[i] = '1';
+
+    for (int i = 0; i <= 3; i++)
+        if (left[i] == r1[i])
+            r2[i] = '0';
+        else
+            r2[i] = '1';
+
+    strcpy(right, left);
+    strcpy(right, r2);
+
+}
+char* startff(char ch, char k[])
+{
+    char* bin = chartobin(ch);
+    char left[5] = " ";
+    char right[5] = " ";
+    char leri[10] = " ";
+
+    for (int i = 0; i <= 3; i++)
+        left[i] = bin[i];
+
+    for (int i = 0; i <= 3; i++)
+        right[i] = bin[i + 4];
+
+    for (int i = 0; i < 16; i++) {
+        dec(left, right, k);
+        for (int i = 0; i < 4; i++)
+            if (k[i] == '0')
+                k[i] = '1';
+            else
+                k[i] = '0';
+    }
+    // cout << left << endl;
+
+     //cout << right << endl;
+    strcpy(leri, left);
+    strcat(leri, right);
+    // cout << leri << endl;
+    cout << str_to_char(leri);
+    return leri;
+}
+int main()
+{
+    string x;
+    cout << "Please Enter the Text" << endl;
+    getline(cin, x);
+    int key[5] = { 0 };
+    char key1[5] = { 0 };
+
+    srand((unsigned)time(0));
+    int n = (rand() % 15);
+    //  cout << keyint<<endl;
+
+    int a[10], i;
+
+    for (i = 0; n > 0; i++)
+    {
+        a[i] = n % 2;
+        n = n / 2;
+    }
+    int j = 0;
+    for (i = i - 1; i >= 0; i--)
+    {
+        key[j] = a[i];// +'0';
+        //cout << a[i];
+        j++;
+
+    }
+
+    for (int m = 0; m < 4; m++)
+        key1[m] = key[m] + '0';
+
+    cout << "The random key we ued it :" << key1 << endl;
+    cout << "cipher text : " ;
+    for (int i = 0; i < x.size(); i++)
+    {
+        if (x[i] == ' ')
+            cout << ' ';
+        else
+            startf(x[i], key1);
+    }
+    cout << endl;
+    cout << "plain text  : " ;
+    for (int i = 0; i < x.size(); i++)
+    {
+        if (x[i] == ' ')
+            cout << ' ';
+        else
+            startff(x[i], key1);
+    }
+    return 0;
+
+}

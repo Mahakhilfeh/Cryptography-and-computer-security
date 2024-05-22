@@ -1,0 +1,86 @@
+//Islam Msalam,Maha khilfa,Raghad Nouri
+#include <iostream>
+#include<string>
+using namespace std;
+char enc(char x, int k)
+{
+	int count = 0;
+	char a[26];
+	for (int i = 0; i < 26; i++)
+		a[i] = 'a' + i;
+
+	char b[26];
+	for (int i = 0; i < 26; i++)
+		b[i] = 'A' + i;
+
+	for (int i = 0; i < 26; i++)
+		if (a[i] == x || b[i] == x)
+			count = i;
+	return a[(count + k) % 26];
+}
+void encription(string x, int k)
+{
+	for (int i = 0; i < x.size(); i++)
+		if (x[i] == ' ')
+			cout << ' ';
+		else
+			cout << enc(x[i], k);
+}
+char dec(char x, int k)
+{
+	int count = 0;
+	char a[26];
+	for (int i = 0; i < 26; i++)
+		a[i] = 'z' - i;
+
+	char b[26];
+	for (int i = 0; i < 26; i++)
+		b[i] = 'Z' - i;
+
+	for (int i = 0; i < 26; i++)
+		if (a[i] == x || b[i] == x)
+			count = i;
+	return a[abs((count + k)) % 26];
+}
+void decription(string x, int k)
+{
+	for (int i = 0; i < x.size(); i++)
+		if (x[i] == ' ')
+			cout << ' ';
+		else
+			cout << dec(x[i], k);
+}
+int main()
+{
+	string x;
+	cout << "Enter a text" << endl;
+	getline(cin, x);
+	cout << "*********************" << endl;
+
+	int k = 1 + (rand() % 25);
+	int c;
+	cout << "What do you whant to do?" << endl
+			<< "1 - Encriotion" << endl
+			<< "2 - Decription" << endl
+			<< "3 - exit" << endl
+			<< "*********************" << endl;
+		cin >> c;
+		if (c == 1)
+		{
+			cout << "cipher text is:";
+			encription(x, k);
+			cout << endl;
+		    cout<<"The random key which used is:" <<k  <<endl;
+		}
+		else if (c == 2)
+		{
+			for (int i = 1; i < 26; i++)
+			{
+				cout << "The decription text using k= " << i <<"  "<< "is: ";
+				decription(x, i);
+				cout << endl;
+			}
+		}
+	
+	return 0;
+}
